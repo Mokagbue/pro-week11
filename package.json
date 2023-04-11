@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/Mokagbue/pro-week11.git",
   "author": "Michelle Okagbue <umbralcompendium@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.6.4"
+  }
 }
