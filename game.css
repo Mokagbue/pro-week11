@@ -1,0 +1,44 @@
+#game-container {
+  max-width: 600px;
+  max-height: 700px;
+}
+.game-box {
+  width: 150px;
+  height: 150px;
+  background-color: rgb(224, 228, 250);
+  margin: 10px;
+}
+.piece {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.o-piece {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+.x-piece {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+#piece-box {
+  max-width: 900px;
+}
+
+/* TICTACTOE CSS */
+.grid{
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+}
+.cell {
+  width:100px;
+  height: 100px;
+  font-size: 50px;
+}
+.tags {
+  font-size: 10px;
+}

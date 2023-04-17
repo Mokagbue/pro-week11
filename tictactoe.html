@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Tic Tac Toe</title>
+    <link rel="icon" type="image/x-icon" href="https://as2.ftcdn.net/v2/jpg/05/31/27/95/1000_F_531279505_kVKY5VcXmlfGTN9m9RzDXgPQ90QW0HMu.jpg">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link rel="stylesheet" href="game.css" />
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/jquery-ui/dist/jquery-ui.js"></script>
+  </head>
+  <body>
+    <h1 class="text-dark d-flex justify-content-center mx-auto">Tic Tac Toe</h1>
+    <div class="d-flex justify-content-center my-3">
+      <div class="grid border border-dark">
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="1"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="2"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="3"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="4"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="5"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="6"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="7"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="8"
+        ></div>
+        <div
+          class="cell border border-dark d-flex justify-content-center align-items-center"
+          data-index="9"
+        ></div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mx-auto">
+      <button class="btn btn-dark" onclick="window.location.reload()">
+        Restart
+      </button>
+    </div>
+
+    <div id="messageAlert" class="border"></div>
+
+    <script>
+      //default starting player will be 'O'
+      let currentPlayer = "X";
+let gameComplete = false;
+      //tracking positons played
+      let currentPlays = {
+        X: [],
+        O: [],
+      };
+
+      const wins = [
+        ["1", "2", "3"],
+        ["4", "5", "6"],
+        ["7", "8", "9"],
+        ["1", "4", "7"],
+        ["2", "5", "8"],
+        ["3", "6", "9"],
+        ["1", "5", "9"],
+        ["3", "5", "7"],
+      ];
+
+      let numberOfPlays = 0;
+
+      $(document).ready(function () {
+        $(".cell").on("click", function () {
+          //you cant make any plays if the game is finished
+          if (!gameComplete) {
+            //if a click happens then that is a new play, we will add that to our counter
+            numberOfPlays++;
+
+            //stating the current player for this round
+            $(this).text(currentPlayer);
+
+            //adding data-index is a cool way to add 'data' to an element without it needing to have any specific/defined meaning,
+            //such as our numbers here, being held by 'data-index', that are only showing the grid positions
+            currentPlays[currentPlayer].push($(this).attr("data-index"));
+
+            //game play setup, determine wins/draws
+            //its a win
+            if (isWinner()) {
+                gameComplete = true;
+              const placeholder = document.getElementById("messageAlert");
+              const winningAlert = document.createElement("div");
+              winningAlert.innerHTML = [
+                `<div class="alert alert-info d-flex flex-column justify-content-center border" role="alert"><div class="d-flex flex-column justify-content-center mx-auto"> Player: ${currentPlayer} is the Winner!</div><div class="border d-flex flex-column justify-content-center mx-auto"><iframe src="https://giphy.com/embed/TJssvTF16urPfizSVy" width="280" height="280" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p class="tags"><a href="https://giphy.com/gifs/spark-celebbynora-newyearsbynora-TJssvTF16urPfizSVy">via GIPHY</a></p></div></div>`,
+              ];
+              placeholder.append(winningAlert);
+            }
+
+            //its a draw
+            if (isADraw()) {
+                isWinner = false;
+              const placeholder = document.getElementById("messageAlert");
+              const drawAlert = document.createElement("div");
+              drawAlert.innerHTML = [
+                `<div class="alert alert-info d-flex flex-column justify-content-center border" role="alert"><div class="d-flex flex-column justify-content-center mx-auto"> No One Wins...</div><div class="border d-flex flex-column justify-content-center mx-auto"><iframe src="https://giphy.com/embed/2ts0GOm9Laawo" width="280" height="139" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/neutrality-2ts0GOm9Laawo">via GIPHY</a></p></div></div>`,
+              ];
+              placeholder.append(drawAlert);
+            }
+
+            //switches the current player: X to O, is activated with the 'click' event
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+          }
+        });
+      });
+
+      function isWinner() {
+        if (numberOfPlays < 5) return;
+        //we are iterating through the array of plays made so far and checking to see if any of the winning plays have been made
+        for (let i = 0; i < wins.length; i++) {
+          let isWinner = true; //this is default
+
+          for (let j = 0; j < wins[i].length; j++) {
+            //if no wins are found then there is no winner and we don't want to keep looping looking for it so we break
+            if ($.inArray(wins[i][j], currentPlays[currentPlayer]) < 0) {
+              isWinner = false;
+              break;
+            }
+          }
+          //if there is a winner than return true
+          if (isWinner) return true;
+        }
+        //else return false
+        return false;
+      }
+
+      function isADraw(){
+          return numberOfPlays === 9;
+      }
+    </script>
+  </body>
+</html>
